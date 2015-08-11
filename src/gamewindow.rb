@@ -5,7 +5,7 @@ class GameWindow < Gosu::Window
 	def initialize(width=800, height=600, fullscreen=false)
 		super
 		self.caption = 'Gasthaus'
-		change_level(Levels::MainMenu.new(self))
+		change_level(Levels::MainMenu.new)
 	end
 	
 	# custom methods
