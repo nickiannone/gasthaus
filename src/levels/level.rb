@@ -3,7 +3,7 @@ require 'gamewindow'
 
 module Levels
 	class Level
-		def initialize()
+		def initialize
 		end
 		
 		# Game callbacks
