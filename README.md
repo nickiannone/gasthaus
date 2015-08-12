@@ -1,4 +1,4 @@
-# gasthaus
+# Spookhouse
 A Haunted House game project in Ruby.
 
 ## Introduction
