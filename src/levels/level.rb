@@ -1,5 +1,5 @@
 require 'gosu'
-require 'gamewindow'
+require '../gamewindow'
 
 module Levels
 	class Level

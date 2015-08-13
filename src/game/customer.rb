@@ -1,4 +1,4 @@
-require 'game/gameobject'
+require './gameobject'
 
 class Customer < GameObject
 	def initialize()

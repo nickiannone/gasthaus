@@ -1,5 +1,5 @@
 require 'gosu'
-require 'levels/level'
+require './level'
 
 module Levels
 	class MainMenu < Level

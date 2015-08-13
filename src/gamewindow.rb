@@ -1,44 +1,76 @@
 require 'gosu'
-require 'levels/mainmenu'
+require './resources'
 
 class GameWindow < Gosu::Window
+  
 	def initialize(width=800, height=600, fullscreen=false)
 		super
-		self.caption = 'Gasthaus'
-		change_level(Levels::MainMenu.new)
+		self.caption = 'Spookhouse'
+		@thing = Resources.load_image('images/thing.png')
+		@background = Resources.load_image('images/bg.png')
+		@time = Time.now.strftime("%d/%m/%Y %H:%M")
+		@x = rand(width - @thing.width)
+		@y = rand(height - @thing.height)
+		@dx = 0
+		@dy = 0
+		@dragging = false
+		@firstframe = true
 	end
 	
-	# custom methods
-	
-	def change_level(newLevel) 
-		@level.tear_down(self) if @level != nil
-		@level = newLevel
-		newLevel.set_up(self)
-	end
+	def mouse_over(x1, y1, x2, y2)
+	  x = self.mouse_x
+	  y = self.mouse_y
+    x >= x1 && x <= x2 && y >= y1 && y <= y2
+  end
 	
 	# Gosu callbacks - pipe into the level object.
 	
 	def draw
-		@level.draw(self)
+	  # draw some images
+	  @background.draw(0, 0, -1)
+	  @thing.draw(@x, @y, 1)
+	  timertext = Gosu::Image.from_text(@time, 12)
+	  timertext.draw(0, 0, 0)
+	  if @firstframe then
+	    @firstframe = false
+	  end
 	end
 	
 	def update
-		@level.update(self)
+	  # render a timer
+	  @time = Time.now.strftime("%d/%m/%Y %H:%M")
+	  if @dragging then
+	    @x = self.mouse_x - @dx
+	    @y = self.mouse_y - @dy
+	  end
 	end
 	
 	def button_down(id)
-		@level.button_down(self, id)
+	  # Start dragging.
+	  if id == Gosu::MsLeft && !@dragging && mouse_over(@x, @y, @x + @thing.width, @y + @thing.height) then
+	    @dx = self.mouse_x - @x
+	    @dy = self.mouse_y - @y
+	    @dragging = true
+	  end
 	end
 	
 	def button_up(id)
-		@level.button_up(self, id)
+	  # Let go of the drag and snap inside the window.
+	  if id == Gosu::MsLeft && @dragging then
+	    @dragging = false
+	    @x = [0, @x, 800].sort[1]
+	    @y = [0, @y, 600].sort[1]
+	  end
 	end
 	
 	def needs_cursor?
-		@level.needs_cursor?
+	  true
 	end
 	
 	def needs_redraw?
-		@level.needs_redraw?
+	  @firstframe || @dragging
 	end
 end
+
+window = GameWindow.new
+window.show
