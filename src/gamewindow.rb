@@ -15,6 +15,7 @@ class GameWindow < Gosu::Window
 		@dy = 0
 		@dragging = false
 		@firstframe = true
+		@timediff = true
 	end
 	
 	def mouse_over(x1, y1, x2, y2)
@@ -31,6 +32,9 @@ class GameWindow < Gosu::Window
 	  @thing.draw(@x, @y, 1)
 	  timertext = Gosu::Image.from_text(@time, 12)
 	  timertext.draw(0, 0, 0)
+	  if @timediff then
+	    @timediff = false
+	  end
 	  if @firstframe then
 	    @firstframe = false
 	  end
@@ -38,7 +42,11 @@ class GameWindow < Gosu::Window
 	
 	def update
 	  # render a timer
-	  @time = Time.now.strftime("%d/%m/%Y %H:%M")
+	  new_time = Time.now.strftime("%d/%m/%Y %H:%M:%S")
+	  if new_time != @time then
+	    @time = new_time
+	    @timediff = true
+	  end
 	  if @dragging then
 	    @x = self.mouse_x - @dx
 	    @y = self.mouse_y - @dy
@@ -68,7 +76,7 @@ class GameWindow < Gosu::Window
 	end
 	
 	def needs_redraw?
-	  @firstframe || @dragging
+	  @firstframe || @dragging || @timediff
 	end
 end
 
