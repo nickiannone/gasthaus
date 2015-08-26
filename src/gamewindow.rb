@@ -1,21 +1,25 @@
 require 'gosu'
 require './resources'
+require './levels/testlevel'
 
 class GameWindow < Gosu::Window
   
 	def initialize(width=800, height=600, fullscreen=false)
 		super
 		self.caption = 'Spookhouse'
-		@thing = Resources.load_image('images/thing.png')
-		@background = Resources.load_image('images/bg.png')
-		@time = Time.now.strftime("%d/%m/%Y %H:%M")
-		@x = rand(width - @thing.width)
-		@y = rand(height - @thing.height)
-		@dx = 0
-		@dy = 0
-		@dragging = false
-		@firstframe = true
-		@timediff = true
+		
+		@level = TestLevel.new
+		
+#		@thing = Resources.load_image('images/thing.png')
+#		@background = Resources.load_image('images/bg.png')
+#		@time = Time.now.strftime("%d/%m/%Y %H:%M")
+#		@x = rand(width - @thing.width)
+#		@y = rand(height - @thing.height)
+#		@dx = 0
+#		@dy = 0
+#		@dragging = false
+#		@firstframe = true
+#		@timediff = true
 	end
 	
 	def mouse_over(x1, y1, x2, y2)

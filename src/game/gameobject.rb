@@ -14,4 +14,20 @@ class GameObject
       @frame.draw(@x - (@frame.width / 2), @y - @frame.height, @y)
     end
   end
+  
+  def width
+    @frame.width
+  end
+  
+  def height 
+    @frame.height
+  end
+  
+  def update_anim
+  end
+  
+  def update_ai
+  end
+  
+  # Mouse events?
 end
