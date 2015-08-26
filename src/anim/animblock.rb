@@ -1,11 +1,16 @@
 require 'gosu'
 
 class AnimBlock
-  attr_accessor :x, :y, :z, :angle, :mode, :skin, :flip_x, :flip_y, :width, :height, :thickness
+  attr_accessor :x, :y, :z, :angle, :mode, :skin, :flip_x, :flip_y, :length, :thickness
   
-  def initialize()
-    @x, @y, @z = 0.0
-    @angle = 0.0
+  def initialize(x = 0.0, y = 0.0)
+    # NOTE: These are calculated by the animation system!
+    @x = x
+    @y = y
+    
+    @z = 0.0 # depth
+    @length = 1.0
+    @angle = 0.0 # radians
     @mode = :normal # either this or :additive
     @skin = nil
     @color = Gosu::Color.argb(0xff_ffffff);
@@ -15,17 +20,14 @@ class AnimBlock
   end
   
   def calculate_scene_pos
+    # get the width of the block.
+    width = (@skin.nil?) ? 1.0 : @skin.width
+  
     # set up the original points
-    upper_left = [-(@width/2),0]
-    upper_right = [@width/2,0]
-    lower_left = [-(@width/2),@height]
-    lower_right = [@width/2,@height]
-    
-    # Add thickness
-    upper_left[0] *= @thickness
-    upper_right[0] *= @thickness
-    lower_left[0] *= @thickness
-    lower_right[0] *= @thickness
+    upper_left = [-(width/2),0]
+    upper_right = [width/2,0]
+    lower_left = [-(width/2),@height]
+    lower_right = [width/2,@height]
     
     # Rotate
     upper_left = rotate(upper_left, @angle)
@@ -40,15 +42,18 @@ class AnimBlock
     lower_right = translate(lower_right, [@x, @y])
     
     # Swap sides if needed
-    if @swap_x then
+    if @flip_x then
       upper_left, upper_right = upper_right, upper_left
       lower_left, lower_right = lower_right, lower_left
     end
     
-    if @swap_y then
+    if @flip_y then
       upper_left, lower_left = lower_left, upper_left
       upper_right, lower_right = lower_right, upper_right
     end
+    
+    # Return the points in Gosu order (clockwise from upper-left).
+    [ upper_left, upper_right, lower_right, lower_left ]
     
   end
   
