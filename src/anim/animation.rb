@@ -24,4 +24,8 @@ class Animation
     end
     Frame.interpolate(@frames[0..nextFrame], time)
   end
+  
+  def anim_time
+    @frames[@frames.length-1].time
+  end
 end

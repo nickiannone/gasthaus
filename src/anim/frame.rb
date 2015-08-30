@@ -15,7 +15,7 @@ class Frame
     prev_frame = Frame.new
     
     # Go through all except the last keyframe, aggregating all values.
-	# NOTE: This design inherently can't handle long animations well!
+	  # NOTE: This design inherently can't handle long animations well!
     for i in 0..frames.size-2 do
       prev_frame.time = frames[i].time
       for edge_id in frames[i].edgemods.keys do # merge all edge modifications.
@@ -47,6 +47,17 @@ class Frame
     
     # Return
     tween
+  end
+  
+  def apply_to_mesh(mesh)
+    # Take each edge mod, look up the edge in the current mesh, and apply length and angle.
+    edgemods.keys.each do |edge_id| 
+      edgemod = edgemods[edge_id]
+      mesh.edges[edge_id].apply(edgemod)
+    end
+    
+    # Walk through each vertex in the tree and update its position (depth or breadth first?)
+    mesh.vertices["root"].update
   end
   
   # TODO Serialization!

@@ -11,8 +11,7 @@ class AnimationSystem
       current_anim = obj.anim_set.animations[obj.curr_anim_name]
       current_subframe = current_anim.frame_lerp(obj.curr_anim_time)
       current_subframe.apply_to_mesh(obj.mesh)
-      sorted_edges = depth_sort(obj.mesh.edges())
-      anim_blocks = create_anim_blocks(sorted_edges)
+      anim_blocks = create_anim_blocks(obj.mesh.edges(), obj.curr_pos)
       @draw_buffer << anim_blocks
     end
     @draw_buffer.flatten!
@@ -27,5 +26,13 @@ class AnimationSystem
         block.z, block.mode
       )
     end
+  end
+  
+  def create_anim_blocks(edges)
+    anim_blocks = []
+    edges.each do |edge| 
+      anim_block = 
+    end
+    anim_blocks
   end
 end
